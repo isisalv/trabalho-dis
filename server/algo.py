@@ -1,7 +1,9 @@
 import math, os
 import numpy as np
+from datetime import datetime as dt
 from numpy import linalg as la
 from PIL import Image
+from PIL.PngImagePlugin import PngInfo
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 MIN = 0.000000002
@@ -14,7 +16,8 @@ def erro_maior_que_minimo(q, r):
     erro = math.fabs(la.norm(r) - la.norm(q))
     return erro >= MIN
 
-def gerar_imagem(file):
+def gerar_imagem(file, user):
+    inicio = dt.now().strftime('%d-%m-%Y_%H-%M-%S')
     sinal = np.loadtxt(file,delimiter=',')
     img = np.zeros(IMG_SIZE*IMG_SIZE) # f0=0
     r = q = sinal - np.matmul(MODELO, img) # r0=g−Hf0
@@ -23,7 +26,9 @@ def gerar_imagem(file):
     z = np.matmul(mod_transp, r) # z0=HTr0
     p = z # p0=z0
 
+    i = 0
     while erro_maior_que_minimo(q, r): # for i=0,1,...,until convergence
+        i += 1
         w = np.matmul(MODELO, p) # wi=Hpi
         a = np.divide(la.norm(z)**2, la.norm(w)**2) # αi=||zi||22/||wi||22
         img = np.add(img, a*p) # fi+1=fi+αipi
@@ -34,7 +39,8 @@ def gerar_imagem(file):
         p = np.add(z2, b*p) #pi+1=zi+1+βipi
         z = z2
 
+    fim = dt.now().strftime('%d-%m-%Y_%H-%M-%S')
     img = np.reshape(img, (IMG_SIZE,IMG_SIZE), 'F')
     img *= 255
     img = Image.fromarray(img.astype(np.uint8), 'L')
-    img.save(f'images/image.png')
+    img.save(f'images/CGNR_60x60_{user}_{inicio}_{fim}_i{i}.png')

@@ -9,5 +9,6 @@ def hello_world():
 
 @app.route("/", methods = ['POST'])
 def post_imagem():
-    algo.gerar_imagem(request.files['file'])
+    algo.gerar_imagem(request.files['file'], 
+                    request.form.get('user'))
     return "<p>Hello, World!</p>"
