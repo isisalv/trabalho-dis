@@ -3,7 +3,6 @@ import numpy as np
 from datetime import datetime as dt
 from numpy import linalg as la
 from PIL import Image
-from PIL.PngImagePlugin import PngInfo
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 MIN = 0.000000002
@@ -43,4 +42,4 @@ def gerar_imagem(file, user):
     img = np.reshape(img, (IMG_SIZE,IMG_SIZE), 'F')
     img *= 255
     img = Image.fromarray(img.astype(np.uint8), 'L')
-    img.save(f'images/CGNR_60x60_{user}_{inicio}_{fim}_i{i}.png')
+    img.save(f"images/CGNR_60x60_{user}_{inicio}_{fim}_i{i}.png")

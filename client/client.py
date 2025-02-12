@@ -2,6 +2,7 @@ import numpy as np
 import requests
 import json
 import os
+from datetime import datetime as dt
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -11,8 +12,10 @@ HEADERS = {'Content-Type': 'application/json', 'Accept':'application/json'}
 VALUES = {'DB': 'photcat', 'OUT': 'csv', 'SHORT': 'short', 'user': 'isis'}
 
 def enviar_sinal():
-    files = { 'file': file}
-    r = requests.post("http://localhost:5000/", files=files, data=VALUES)
-    print(r.content)
+    r = requests.post("http://localhost:5000/", files={'file': file}, data=VALUES)
+
+    print(f"[{ dt.now().strftime('%d/%m/%Y %H:%M:%S') }]")
+    print(f" Uso da CPU: { r.json()['cpu'] }%")
+    print(f" Uso de Memória: { r.json()['ram'] }% \n")
 
 enviar_sinal()
