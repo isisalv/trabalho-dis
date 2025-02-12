@@ -7,5 +7,5 @@ def hello_world():
     return "<p>Hello, World!</p>"
 
 @app.route("/", methods = ['POST'])
-def hello_world():
+def post_imagem():
     return "<p>Hello, World!</p>"
