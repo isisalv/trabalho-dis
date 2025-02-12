@@ -3,6 +3,11 @@ import numpy as np
 from datetime import datetime as dt
 from numpy import linalg as la
 from PIL import Image
+from celery import shared_task
+from .config import create_app
+
+flask_app = create_app()
+celery_app = flask_app.extensions["celery"]
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 MIN = 0.000000002
@@ -15,9 +20,10 @@ def erro_maior_que_minimo(q, r):
     erro = math.fabs(la.norm(r) - la.norm(q))
     return erro >= MIN
 
+@shared_task(ignore_result=False)
 def gerar_imagem(file, user):
     inicio = dt.now().strftime('%d-%m-%Y_%H-%M-%S')
-    sinal = np.loadtxt(file,delimiter=',')
+    sinal = np.fromstring(file,sep=os.linesep)
     img = np.zeros(IMG_SIZE*IMG_SIZE) # f0=0
     r = q = sinal - np.matmul(MODELO, img) # r0=g−Hf0
 
@@ -43,3 +49,4 @@ def gerar_imagem(file, user):
     img *= 255
     img = Image.fromarray(img.astype(np.uint8), 'L')
     img.save(f"images/CGNR_60x60_{user}_{inicio}_{fim}_i{i}.png")
+    return 'Yey'

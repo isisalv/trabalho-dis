@@ -1,6 +1,4 @@
-import numpy as np
 import requests
-import json
 import os
 from datetime import datetime as dt
 
@@ -14,8 +12,17 @@ VALUES = {'DB': 'photcat', 'OUT': 'csv', 'SHORT': 'short', 'user': 'isis'}
 def enviar_sinal():
     r = requests.post("http://localhost:5000/", files={'file': file}, data=VALUES)
 
-    print(f"[{ dt.now().strftime('%d/%m/%Y %H:%M:%S') }]")
-    print(f" Uso da CPU: { r.json()['cpu'] }%")
-    print(f" Uso de Memória: { r.json()['ram'] }% \n")
+    if r.status_code == 200:
+        print(f"[{ dt.now().strftime('%d/%m/%Y %H:%M:%S') }]")
+        print(f" Result ID: { r.json()['result_id'] }%")
+        print(f" Uso da CPU: { r.json()['cpu'] }%")
+        print(f" Uso de Memória: { r.json()['ram'] }% \n")
+    else:
+        print("Erro")
+
+def get_result():
+    r = requests.get("http://localhost:5000/24809e80-dc58-409f-af17-f364f57362e6%")
+    print(r.content)
 
 enviar_sinal()
+# get_result()

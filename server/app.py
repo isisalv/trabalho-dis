@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
-from . import algo
-import psutil
+from .algo import gerar_imagem
+import psutil, csv
+from celery.result import AsyncResult
+from datetime import datetime as dt
 
 app = Flask(__name__)
 
@@ -10,8 +12,19 @@ def hello_world():
 
 @app.route("/", methods = ['POST'])
 def post_imagem():
-    algo.gerar_imagem(
-                request.files['file'], 
-                request.form.get('user'))
-    return jsonify(cpu = psutil.cpu_percent(), ram = psutil.virtual_memory().percent)
+    try:
+        result = gerar_imagem.delay(
+                    request.files['file'].read(), 
+                    request.form.get('user'))
+        return {'cpu': psutil.cpu_percent(), 'ram': psutil.virtual_memory().percent, 'result_id' : result.id}
+    except Exception as e:
+        print(e)
     
+@app.route("/<string:result_id>")
+def get_result(result_id):
+    result = AsyncResult(result_id)
+    return {
+        "ready": result.ready(),
+        "successful": result.successful(),
+        "value": result.get(),
+    }
