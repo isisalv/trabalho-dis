@@ -1,10 +1,11 @@
-import math
+import math, os
 import numpy as np
 from numpy import linalg as la
 from PIL import Image
 
+PATH = os.path.dirname(os.path.realpath(__file__))
 MIN = 0.000000002
-MODELO = np.load('H-1.npy')
+MODELO = np.load(PATH + r'\\H-1.npy')
 IMG_SIZE = 60
 
 def erro_maior_que_minimo(q, r):
@@ -13,7 +14,8 @@ def erro_maior_que_minimo(q, r):
     erro = math.fabs(la.norm(r) - la.norm(q))
     return erro >= MIN
 
-def gerar_imagem(sinal):
+def gerar_imagem(file):
+    sinal = np.loadtxt(file,delimiter=',')
     img = np.zeros(IMG_SIZE*IMG_SIZE) # f0=0
     r = q = sinal - np.matmul(MODELO, img) # r0=g−Hf0
 
@@ -35,4 +37,4 @@ def gerar_imagem(sinal):
     img = np.reshape(img, (IMG_SIZE,IMG_SIZE), 'F')
     img *= 255
     img = Image.fromarray(img.astype(np.uint8), 'L')
-    img.save(f'image.png')
+    img.save(f'images/image.png')

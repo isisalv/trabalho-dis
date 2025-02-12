@@ -1,8 +1,11 @@
 import numpy as np
 import requests
 import json
+import os
 
-file = open('G-1.csv','rb')
+PATH = os.path.dirname(os.path.realpath(__file__))
+
+file = open(PATH + r'\\G-1.csv','rb')
 
 HEADERS = {'Content-Type': 'application/json', 'Accept':'application/json'}
 VALUES = {'DB': 'photcat', 'OUT': 'csv', 'SHORT': 'short'}

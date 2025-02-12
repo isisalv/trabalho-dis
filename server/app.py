@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, request
+from . import algo
 
 app = Flask(__name__)
 
@@ -8,4 +9,5 @@ def hello_world():
 
 @app.route("/", methods = ['POST'])
 def post_imagem():
+    algo.gerar_imagem(request.files['file'])
     return "<p>Hello, World!</p>"
