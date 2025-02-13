@@ -1,3 +1,9 @@
+*
+!*/
+!*.*
 *.csv
 *.npy
 *.png
+*.pyc
+*.exchange
+*.msg

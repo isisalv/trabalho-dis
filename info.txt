@@ -1,1 +1,4 @@
-celery -A celery_app worker -l info -P solo
+celery -A server.algo worker -l info -P solo
+
+celery -A server.algo worker -l info -P eventlet
+celery -A server.algo worker -l info -P gevent

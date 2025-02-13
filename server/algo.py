@@ -20,7 +20,7 @@ def erro_maior_que_minimo(q, r):
     erro = math.fabs(la.norm(r) - la.norm(q))
     return erro >= MIN
 
-@shared_task(ignore_result=False)
+@shared_task(ignore_result=True)
 def gerar_imagem(file, user):
     try:
         inicio = dt.now().strftime('%d-%m-%Y_%H-%M-%S')
