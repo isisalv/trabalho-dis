@@ -1,8 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from .algo import gerar_imagem
-import psutil, csv
+import psutil
 from celery.result import AsyncResult
-from datetime import datetime as dt
 
 app = Flask(__name__)
 

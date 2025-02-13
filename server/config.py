@@ -35,7 +35,9 @@ def create_app() -> Flask:
             result_serializer = 'json',
             accept_content = ['json'],
             imports = ('algo'),
-            task_always_eager = False
+            task_always_eager = False,
+            # worker_max_tasks_per_child = 1,
+            # broker_pool_limit = 1
         ),
     )
     app.config.from_prefixed_env()
