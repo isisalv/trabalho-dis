@@ -4,10 +4,11 @@ from datetime import datetime as dt
 from time import sleep
 
 PATH = os.path.dirname(os.path.realpath(__file__))
-USUARIOS = ['user1', 'user2', 'user3', 'user4', 'user5']
+USUARIOS = ['umbreon', 'sylveon', 'jolteon', 'vaporeon', 'flameon']
+ARQUIVOS = ['G-1.csv', 'G-2.csv', 'A-60x60-1.csv']
 
-def enviar_sinal(user = 'userx', ):
-    file = open(PATH + r'\\G-1.csv','rb')
+def enviar_sinal(user = 'userx', filename = 'G-1.csv'):
+    file = open(PATH + r'\\' + filename,'rb')
     r = requests.post("http://localhost:5000/", files={'file': file}, 
         data={'DB': 'photcat', 'OUT': 'csv', 'SHORT': 'short', 'user': user})
 
@@ -26,8 +27,5 @@ def get_result():
 random.seed()
 
 while True:
-    enviar_sinal(USUARIOS[random.randint(0,4)])
-    # sleep(random.randint(1, 5))
-    sleep(5)
-
-enviar_sinal(USUARIOS[random.randint(0,4)])
+    enviar_sinal(USUARIOS[random.randint(0,4)], ARQUIVOS[random.randint(0,2)])
+    sleep(random.randint(1, 5))
